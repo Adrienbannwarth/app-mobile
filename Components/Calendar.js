@@ -10,7 +10,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker'
 import SwitchToggle from 'react-native-switch-toggle';
 import Blocknote from '../Components/Blocknote'
 import Date from './Date'
-import { red } from 'ansi-colors';
+
 
 class Calendar extends React.Component {
     //   // methode obligatoire
