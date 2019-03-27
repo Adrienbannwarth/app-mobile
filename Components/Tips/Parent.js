@@ -10,7 +10,6 @@ import { Font } from 'expo'
 
 import { StyleSheet, View, TextInput, FlatList, Text, Image, TouchableOpacity, Button, ScrollView, ActivityIndicator } from 'react-native'
 import HeaderTips from './HeaderTips';
-import { blue } from 'ansi-colors';
 
 export function getTipsDetailFromApi(id) {
     return fetch('https://bellybump.fr/api/api_article_id.php?id=' + id)
