@@ -1,72 +1,174 @@
 // // creer un compenent 
 import React from 'react'
-import  {LinearGradient} from 'expo'
-
+import { LinearGradient } from 'expo'
+import Header from '../Header'
+import Tips from '../Tips'
+import TipsItem from '../TipsItem'
+import { Font } from 'expo'
 
 // // importer les composents react native
 
-import{ StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity} from 'react-native'
+import { StyleSheet, View, TextInput, FlatList, Text, Image, TouchableOpacity, Button, ScrollView, ActivityIndicator } from 'react-native'
+import HeaderTips from './HeaderTips';
+import { blue } from 'ansi-colors';
 
-
-class Parent extends React.Component{
- 
-        constructor(props) {
-            super(props);
-
-            this.state = {
-                article : null
-            }
-        }
-
-        componentDidMount() {
-            fetch('http://igm.univ-mlv.fr/~gambette/ENSIUT/monique.pantel/apiAllocine.php?id=22')
-                .then((response) => response.json())
-                .then((responseJson) => {
-
-                    // Sanitize articleUrl
-                    // responseJson.urlAffiche = responseJson.urlAffiche.replace(/\\/g, '');
-                    this.setState({ article: responseJson });
-                })
-                .catch((error) => {
-                    console.error(error);
-                })
-        }
-
-        render(){
-            
-            return (
-
-                <View style={{flex: 1}}>
-
-            
-
-                <LinearGradient
-              colors={['#96a1fc', '#6fa9fe']}
-              style={{ padding: 15, alignItems: 'center', borderRadius: 5, flex: 1, width: '100%' }}>
-              </LinearGradient>
-
-
-
-                <View style={{flex: 4, flexDirection: 'row', backgroundColor: '#f2f3fc', flexWrap: "wrap", justifyContent: "space-around"}}>
-
-                    <View>
-                    {this.state.article && <Image source={{uri: this.state.article.urlAffiche}}   style={{width: 200, height: 400}} />}
-                    </View>
-
-
-                 </View>
-            </View>
-            )
-        }
+export function getTipsDetailFromApi(id) {
+    return fetch('https://bellybump.fr/api/api_article_id.php?id=' + id)
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
 }
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-           
-        },
+class Parent extends React.Component {
 
-    });
-    
-    
-    export default Parent
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false,
+            isLoading: true,
+            dataSource: null,
+            fontLoaded: false
+        }
+    }
+
+    ShowHideComponent = () => {
+        if (this.state.show == true) {
+            this.setState({ show: false });
+        } else {
+            this.setState({ show: true });
+        }
+    };
+
+
+    componentDidMount() {
+
+        Font.loadAsync({
+            'CenturyGothic': require('../../fonts/CenturyGothic.ttf')
+        });
+        this.setState({ fontLoaded: true });
+
+        return fetch('https://bellybump.fr/api/api_article.php?id_category=1')
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                this.setState({
+                    isLoading: false,
+                    dataSource: responseJson.resultats.article,
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+
+    }
+
+
+    _displayDetailForTips = (idTips) => {
+        this.props.navigation.navigate("TipsDetail", { idTips: idTips })
+        console.log("display for Tips id" + idTips);
+    }
+
+
+    render() {
+        if (this.state.isLoading) {
+
+            return (
+                <View style={styles.container}>
+                </View>
+            )
+        } else {
+
+            return (
+
+                <View style={styles.container}>
+
+                    <View style={{ zIndex: 10 }}>
+                        <LinearGradient
+                            colors={['#96a1fc', '#6fa9fe']}
+                            style={{ padding: 15, alignItems: 'center', borderRadius: 5, width: '100%', height: 180 }}>
+                        </LinearGradient>
+
+                        <View style={styles.quote}>
+                        <View style={{ flex: 1}}>
+                                <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.navigate('Tips')} >
+                                    <Image style={styles.back} source={require('../../img/back.png')} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.slogan}>La vie ne vaut rien mais rien ne vaut une vie.
+                                         </Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
+                            </View>
+                           
+
+                        </View>
+                    </View>
+
+                    <FlatList
+                        
+                        data={this.state.dataSource}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => <TipsItem tips={item} displayDetailForTips={this._displayDetailForTips} />}
+                    />
+
+                    {/* 
+                        {this.state.dataSource && this.state.dataSource.map((val, key) => {
+                            return <TouchableOpacity style={styles.block} key={key} >
+                                <Image source={{ uri: val.image }} style={styles.img} />
+                                <Text style={styles.title}>{val.intitule_article}</Text>
+                                {this.state.show ? (
+                                    <View>
+                                <Text style={styles.contenu}>{val.contenu}</Text>
+                                </View>
+                                ) : null}
+
+
+                            </TouchableOpacity>
+                        })} */}
+
+                </View>
+
+            );
+        }
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+
+    back: {
+        width: 60,
+        height: 60,
+        zIndex: 10,
+        alignSelf: 'center',
+        zIndex: 10,
+    },
+    quote: {
+        elevation: 11,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 100,
+        alignSelf: 'center',
+        height: 140,
+        borderRadius: 15,
+        width: '80%',
+        backgroundColor: 'white',
+        position: 'absolute',
+        zIndex: 3
+    },
+    slogan: {
+        fontFamily: 'CenturyGothic',
+        padding: 20,
+        position: 'absolute',
+        textAlign: 'center',
+    },
+});
+
+
+export default Parent
