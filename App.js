@@ -1,6 +1,5 @@
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['Remote debugger']);
-import Icon from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo'
 
 import React from 'react';
@@ -222,11 +221,11 @@ const DrawerNavigator = createDrawerNavigator({
 //////////////////////////////// SWICTH NAVIGATOR //////////////////////////////////////
 
 const AppSwitchNavigator = createSwitchNavigator({
-     // First: {screen: First},
-     // Choise: { screen: Choise },
-     // Padre: { screen: Padre },
-     // Madre: { screen: Madre },
-     // Login: { screen: Login },
+     First: {screen: First},
+     Choise: { screen: Choise },
+     Padre: { screen: Padre },
+     Madre: { screen: Madre },
+     Login: { screen: Login },
      Dashboard: { screen: DrawerNavigator }
 });
 
