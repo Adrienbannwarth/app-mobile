@@ -6,7 +6,7 @@ import { Font } from 'expo'
 // // importer les composents react native
 
 import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity,ActivityIndicator } from 'react-native'
-import { red } from 'ansi-colors';
+
 
 
 
