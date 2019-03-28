@@ -1,6 +1,5 @@
 // // creer un compenent 
 import React from 'react'
-import { LinearGradient } from 'expo'
 import Header from './Header'
 import { Font } from 'expo'
 
@@ -20,6 +19,7 @@ class Tips extends React.Component {
             fontLoaded: false
         }
     }
+
     async componentWillMount() {
         await Font.loadAsync({
             'CenturyGothic': require('../fonts/CenturyGothic.ttf')
@@ -29,7 +29,7 @@ class Tips extends React.Component {
 
 
     render() {
-        
+
         return (
 
             <View style={{ flex: 1 }}>
@@ -49,35 +49,55 @@ class Tips extends React.Component {
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Parent')} >
                                 <Image style={styles.img} source={require('../img/devenir.png')} />
                                 {this.state.fontLoaded ? (
-                                <Text style={styles.title}>DEVENIR PARENT</Text>
+                                    <Text style={styles.title}>DEVENIR PARENT</Text>
                                 ) : (
                                         <ActivityIndicator size="large" />
-                                   )}
+                                    )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Confort')}>
                                 <Image style={styles.img} source={require('../img/bien-etre.png')} />
-                                <Text style={styles.title}>BIEN ETRE</Text>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.title}>BIEN ÊTRE</Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Work')}>
                                 <Image style={styles.img} source={require('../img/work.png')} />
-                                <Text style={styles.title}>GROSSESSE & TRAVAIL</Text>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.title}>GROSSESSE & TRAVAIL</Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Hobby')}>
                                 <Image style={styles.img} source={require('../img/loisir.png')} />
-                                <Text style={styles.title}>LOISIRS</Text>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.title}>LOISIRS</Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Name')}>
                                 <Image style={styles.img} source={require('../img/name.png')} />
-                                <Text style={styles.title}>PRENOMS</Text>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.title}>PRÉNOMS</Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Birth')}>
                                 <Image style={styles.img} source={require('../img/naissance.png')} />
-                                <Text style={styles.title}>POST-NAISSANCE</Text>
+                                {this.state.fontLoaded ? (
+                                    <Text style={styles.title}>POST-NAISSANCE</Text>
+                                ) : (
+                                        <ActivityIndicator size="large" />
+                                    )}
                             </TouchableOpacity>
 
                         </View>
@@ -147,10 +167,10 @@ const styles = StyleSheet.create({
         zIndex: 3,
     },
     title: {
-        // fontFamily: 'CenturyGothic',
+        fontFamily: 'CenturyGothic',
+        fontSize: 15,
         textAlign: 'center',
         paddingTop: 20,
-       
     },
 })
 

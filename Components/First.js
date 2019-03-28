@@ -13,6 +13,19 @@ import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOp
 class First extends React.Component {
     //   // methode obligatoire
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            fontLoaded: false
+        }
+    }
+
+    async componentWillMount() {
+        await Font.loadAsync({
+            'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+        });
+        this.setState({ fontLoaded: true });
+    }
 
     render() {
 
@@ -33,11 +46,19 @@ class First extends React.Component {
                 </View>
                 <View style={{ flex: 3, justifyContent: 'space-around', flexDirection: 'column', }}>
                     <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Choise')}>
-                        <Text style={styles.title}>Inscription</Text>
+                        {this.state.fontLoaded ? (
+                            <Text style={styles.title}>Inscription</Text>
+                        ) : (
+                                <ActivityIndicator size="large" />
+                            )}
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={styles.title}>Connexion</Text>
+                        {this.state.fontLoaded ? (
+                            <Text style={styles.title}>Connexion</Text>
+                        ) : (
+                                <ActivityIndicator size="large" />
+                            )}
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1 }}></View>
@@ -64,6 +85,7 @@ const styles = StyleSheet.create({
     },
 
     title: {
+        fontFamily: 'CenturyGothic',
         color: 'white',
         textAlign: 'center',
         fontSize: 20,
@@ -77,9 +99,9 @@ const styles = StyleSheet.create({
 
     },
     logo: {
-        width: 400,
-        height: 300,
-        marginLeft: 30,
+        width: 250,
+        height: 250,
+        marginLeft: 30
     },
 
 })

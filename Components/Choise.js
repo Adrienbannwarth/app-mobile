@@ -1,16 +1,32 @@
 // // creer un compenent 
 import React from 'react'
 import { LinearGradient } from 'expo'
+import { Font } from 'expo'
 
 
 // // importer les composents react native
 
-import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity,ActivityIndicator } from 'react-native'
 
 
 // // creer une class qui herite  // component -> element graphique 
 class Choise extends React.Component {
      //   // methode obligatoire
+
+     constructor(props) {
+          super(props)
+          this.state = {
+               fontLoaded: false
+          }
+     }
+
+     async componentWillMount() {
+          await Font.loadAsync({
+               'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+          });
+          this.setState({ fontLoaded: true });
+     }
+
      render() {
           return (
 
@@ -30,14 +46,22 @@ class Choise extends React.Component {
 
                     <View style={{ flex: 3, justifyContent: 'space-around', flexDirection: 'column', }}>
                          <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Padre')}>
-                              <Text style={styles.title}>Père</Text>
+                              {this.state.fontLoaded ? (
+                                   <Text style={styles.title}>Père</Text>
+                              ) : (
+                                        <ActivityIndicator size="large" />
+                                   )}
                          </TouchableOpacity>
 
                          <TouchableOpacity style={styles.child_container} onPress={() => this.props.navigation.navigate('Madre')}>
-                              <Text style={styles.title}>Mère</Text>
+                              {this.state.fontLoaded ? (
+                                   <Text style={styles.title}>Mère</Text>
+                              ) : (
+                                        <ActivityIndicator size="large" />
+                                   )}
                          </TouchableOpacity>
                     </View>
-                    <View style={{flex: 1}}></View>
+                    <View style={{ flex: 1 }}></View>
                </View>
 
           );
@@ -59,6 +83,7 @@ const styles = StyleSheet.create({
      },
 
      title: {
+          fontFamily: 'CenturyGothic',
           color: 'white',
           textAlign: 'center',
           fontSize: 20,
@@ -72,9 +97,9 @@ const styles = StyleSheet.create({
 
      },
      logo: {
-          width: 400,
-          height: 300,
-          marginLeft: 30,
+          width: 250,
+          height: 250,
+          marginLeft: 30
      },
 
 })

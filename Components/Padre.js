@@ -1,9 +1,10 @@
 // // creer un compenent 
 import React from 'react'
+import { Font } from 'expo'
 
 // // importer les composents react native
 
-import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native'
 
 // // creer une class qui herite  // component -> element graphique 
 class Padre extends React.Component {
@@ -16,8 +17,16 @@ class Padre extends React.Component {
             email: '',
             password: '',
             id: '',
-            isVisible: false
+            isVisible: false,
+            fontLoaded: false
         }
+    }
+
+    async componentWillMount() {
+        await Font.loadAsync({
+            'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+        });
+        this.setState({ fontLoaded: true });
     }
 
     userRegister = () => {
@@ -69,47 +78,69 @@ class Padre extends React.Component {
 
                 </View>
                 <View style={{ flex: 3, justifyContent: 'space-around', flexDirection: 'column', }}>
-                    <TextInput
-                        placeholder="Prénom"
-                        placeholderTextColor="white"
-                        TextInput="rgba(255,255,255,0.5"
-                        style={styles.input}
-                        onChangeText={prenom => this.setState({ prenom })}
-                    />
-                    <TextInput
-                        placeholder="E-mail"
-                        placeholderTextColor="white"
-                        TextInput="rgba(255,255,255,0.5"
-                        style={styles.input}
-                        onChangeText={email => this.setState({ email })}
-                    />
+                    {this.state.fontLoaded ? (
+                        <TextInput
+                            placeholder="Prénom"
+                            placeholderTextColor="white"
+                            TextInput="rgba(255,255,255,0.5"
+                            style={styles.input}
+                            onChangeText={prenom => this.setState({ prenom })}
+                        />
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
+                    {this.state.fontLoaded ? (
+                        <TextInput
+                            placeholder="E-mail"
+                            placeholderTextColor="white"
+                            TextInput="rgba(255,255,255,0.5"
+                            style={styles.input}
+                            onChangeText={email => this.setState({ email })}
+                        />
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
 
-
-                    <TextInput
-                        placeholder="Mot de passe"
-                        secureTextEntry={true}
-                        placeholderTextColor="white"
-                        TextInput="rgba(255,255,255,0.5"
-                        style={styles.input}
-                        onChangeText={password => this.setState({ password })}
-                    />
-
-                    <TextInput
-                        placeholder="ID"
-                        placeholderTextColor="white"
-                        TextInput="rgba(255,255,255,0.5"
-                        style={styles.input}
-                        onChangeText={id => this.setState({ id })}
-                    />
+                    {this.state.fontLoaded ? (
+                        <TextInput
+                            placeholder="Mot de passe"
+                            secureTextEntry={true}
+                            placeholderTextColor="white"
+                            TextInput="rgba(255,255,255,0.5"
+                            style={styles.input}
+                            onChangeText={password => this.setState({ password })}
+                        />
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
+                    {this.state.fontLoaded ? (
+                        <TextInput
+                            placeholder="ID"
+                            placeholderTextColor="white"
+                            TextInput="rgba(255,255,255,0.5"
+                            style={styles.input}
+                            onChangeText={id => this.setState({ id })}
+                        />
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
 
 
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Dashboard')} style={styles.login}>
                         {/* onPress={this.userRegister} */}
-                        <Text style={styles.button}>S'inscrire</Text>
+                        {this.state.fontLoaded ? (
+                            <Text style={styles.button}>S'inscrire</Text>
+                        ) : (
+                                <ActivityIndicator size="large" />
+                            )}
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.forget} onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={styles.forget}>Tu as déja un compte ? Connecte-toi ! </Text>
+                        {this.state.fontLoaded ? (
+                            <Text style={styles.forget}>Tu as déja un compte ? Connecte-toi ! </Text>
+                        ) : (
+                                <ActivityIndicator size="large" />
+                            )}
                     </TouchableOpacity>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.navigate('Choise')} >
@@ -137,7 +168,7 @@ const styles = StyleSheet.create({
     },
 
     input: {
-
+        fontFamily: 'CenturyGothic',
         borderRadius: 10,
         color: 'white',
         textAlign: 'center',
@@ -150,7 +181,6 @@ const styles = StyleSheet.create({
 
     },
     login: {
-
         backgroundColor: 'rgba(255,255,255,0.2)',
         borderRadius: 10,
         marginLeft: 80,
@@ -163,7 +193,9 @@ const styles = StyleSheet.create({
     },
 
     button: {
+        fontFamily: 'CenturyGothic',
         height: 55,
+        fontSize: 18,
         textAlign: 'center',
         color: 'white',
         padding: 15,
@@ -179,8 +211,11 @@ const styles = StyleSheet.create({
     logo: {
         width: 250,
         height: 250,
+        marginLeft: 30,
+        marginTop: 20,
     },
     forget: {
+        fontFamily: 'CenturyGothic',
         marginTop: 10,
         textAlign: 'center',
         color: 'white',

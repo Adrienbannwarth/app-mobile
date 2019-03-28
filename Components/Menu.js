@@ -70,7 +70,7 @@ class Menu extends React.Component {
                return diff;
           }
 
-          date1 = new Date('2019-07-20');
+          date1 = new Date('2019-07-19');
           date2 = new Date();
           diff = dateDiff(date1, date2);
 

@@ -1,11 +1,11 @@
 // // creer un compenent 
 import React from 'react'
 import Header from './Header'
-
+import { Font } from 'expo'
 
 // // importer les composents react native
 
-import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, Picker, ScrollView } from 'react-native'
+import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, Picker, ScrollView, ActivityIndicator } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import SwitchToggle from 'react-native-switch-toggle';
 import Blocknote from '../Components/Blocknote'
@@ -15,18 +15,19 @@ import Date from './Date'
 class Calendar extends React.Component {
     //   // methode obligatoire
 
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         date: '',
-    //         isVisible: false,
-    //         switchOn1: false,
-    //         noteArray: [],
-    //         noteText: '',
-    //         pickerSelection: 'Aucun rendez-vous séléctionné',
+    constructor(props) {
+        super(props)
+        this.state = {
+            fontLoaded: false
+            // date: '',
+            // isVisible: false,
+            // switchOn1: false,
+            // noteArray: [],
+            // noteText: '',
+            // pickerSelection: 'Aucun rendez-vous séléctionné',
 
-    //     }
-    // }
+        }
+    }
 
     // onPress1 = () => {
     //     this.setState({ switchOn1: !this.state.switchOn1 });
@@ -73,6 +74,13 @@ class Calendar extends React.Component {
     //     })
     // }
 
+    async componentWillMount() {
+        await Font.loadAsync({
+            'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+        });
+        this.setState({ fontLoaded: true });
+    }
+
     render() {
         // let dates = this.state.noteArray.map((val, Key) => {
         //     return <Date key={Key} Keyval={Key} val={val}
@@ -85,13 +93,16 @@ class Calendar extends React.Component {
                 <Header />
 
                 <Text style={styles.titlee}>Calendrier</Text>
-                <Text style={styles.littletitle}>Etre bien organisé</Text>
+                <Text style={styles.littletitle}>Être bien organisé</Text>
 
 
-                <View style={{ flex: 4, flexDirection: 'row', backgroundColor: '#f2f3fc', flexWrap: "wrap", justifyContent: "center", alignItems:'center' }}>
+                <View style={{ flex: 4, flexDirection: 'row', backgroundColor: '#f2f3fc', flexWrap: "wrap", justifyContent: "center", alignItems: 'center' }}>
 
-
-            <Text style={{fontSize: 20}}>Prochainement ...</Text>
+                    {this.state.fontLoaded ? (
+                        <Text style={{ fontSize: 20,  fontFamily: 'CenturyGothic'}}>Prochainement ...</Text>
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
 
                 </View>
             </View>

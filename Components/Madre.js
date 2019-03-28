@@ -1,11 +1,12 @@
 // // creer un compenent 
 import React from 'react'
 import moment from 'moment'
+import { Font } from 'expo'
 
 
 // // importer les composents react native
 
-import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView, ActivityIndicator } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 
 
@@ -20,9 +21,15 @@ class Madre extends React.Component {
             date: '',
             email: '',
             password: '',
-
+            fontLoaded: false,
             isVisible: false
         }
+    }
+    async componentWillMount() {
+        await Font.loadAsync({
+            'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+        });
+        this.setState({ fontLoaded: true });
     }
 
     userRegister = () => {
@@ -88,31 +95,35 @@ class Madre extends React.Component {
 
 
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-           
+
+                <Image
+                    style={styles.img}
+                    source={require('../img/login.jpg')}
+                />
+
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <Image
-                        style={styles.img}
-                        source={require('../img/login.jpg')}
+                        style={styles.logo}
+                        source={require('../img/logo.png')}
                     />
 
-                    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        <Image
-                            style={styles.logo}
-                            source={require('../img/logo.png')}
+                </View>
+
+
+                <View style={{ flex: 3, justifyContent: 'space-around', flexDirection: 'column', }}>
+                    {this.state.fontLoaded ? (
+                        <TextInput
+                            placeholder="Prénom"
+                            returnKeyType='next'
+                            placeholderTextColor="white"
+                            TextInput="rgba(255,255,255,0.5"
+                            style={styles.input}
+                            onChangeText={prenom => this.setState({ prenom })}
                         />
-
-                    </View>
-
-
-                <View style={{flex: 3, justifyContent: 'space-around', flexDirection: 'column', }}>
-
-                    <TextInput
-                        placeholder="Prénom"
-                        returnKeyType='next'
-                        placeholderTextColor="white"
-                        TextInput="rgba(255,255,255,0.5"
-                        style={styles.input}
-                        onChangeText={prenom => this.setState({ prenom })}
-                    />
+                    ) : (
+                            <ActivityIndicator size="large" />
+                        )}
+                        {this.state.fontLoaded ? (
                     <TextInput
                         placeholder="E-mail"
                         keyboardType='email-address'
@@ -122,9 +133,17 @@ class Madre extends React.Component {
                         style={styles.input}
                         onChangeText={email => this.setState({ email })}
                     />
+                    ) : (
+                        <ActivityIndicator size="large" />
+                    )}
 
                     <TouchableOpacity style={styles.input} onPress={this.showPicker}>
-                        <Text style={styles.textTerm}>Date du terme</Text>
+                    {this.state.fontLoaded ? (
+                        <Text style={styles.textTerm}>Date du terme: {this.state.date}</Text>
+                        ) : (
+                            <ActivityIndicator size="large" />
+                        )}
+                        
                     </TouchableOpacity>
 
 
@@ -137,9 +156,7 @@ class Madre extends React.Component {
                         onPress={date => this.setState({ date })}
                     />
 
-                    <Text style={styles.TextDate}>{this.state.date}</Text>
-
-
+                    {this.state.fontLoaded ? (
                     <TextInput
                         returnKeyType='next'
                         placeholder="Mot de passe"
@@ -149,21 +166,24 @@ class Madre extends React.Component {
                         style={styles.input}
                         onChangeText={password => this.setState({ password })}
                     />
-
-
-                    {/* <TextInput
-                    placeholder="Confirmer le mot de passe"
-                    placeholderTextColor="white"
-                    TextInput="rgba(255,255,255,0.5"
-                    style={styles.input}
-                    /> */}
+                    ) : (
+                        <ActivityIndicator size="large" />
+                    )}
 
                     <TouchableOpacity onPress={this.userRegister} style={styles.login}>
+                    {this.state.fontLoaded ? (
                         <Text style={styles.button}>S'inscrire </Text>
+                        ) : (
+                            <ActivityIndicator size="large" />
+                        )}
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.forget} onPress={() => this.props.navigation.navigate('Login')}>
+                    {this.state.fontLoaded ? (
                         <Text style={styles.forget}>tu as déja un compte? Connecte toi ! </Text>
+                        ) : (
+                            <ActivityIndicator size="large" />
+                        )}
                     </TouchableOpacity>
 
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -190,6 +210,7 @@ const styles = StyleSheet.create({
 
     },
     input: {
+        fontFamily: 'CenturyGothic',
         borderRadius: 10,
         color: 'white',
         textAlign: 'center',
@@ -202,7 +223,6 @@ const styles = StyleSheet.create({
 
     },
     login: {
-
         backgroundColor: 'rgba(255,255,255,0.2)',
         borderRadius: 10,
         marginLeft: 80,
@@ -210,15 +230,18 @@ const styles = StyleSheet.create({
     },
 
     textTerm: {
+        fontFamily: 'CenturyGothic',
         textAlign: 'center',
         color: 'white',
         marginTop: 4
     },
 
     button: {
+        fontFamily: 'CenturyGothic',
         height: 55,
         textAlign: 'center',
         color: 'white',
+        fontSize: 18,
         padding: 15,
 
     },
@@ -232,8 +255,11 @@ const styles = StyleSheet.create({
     logo: {
         width: 250,
         height: 250,
+        marginLeft: 30,
+        marginTop: 20,
     },
     forget: {
+        fontFamily: 'CenturyGothic',
         marginTop: 10,
         textAlign: 'center',
         color: 'white',

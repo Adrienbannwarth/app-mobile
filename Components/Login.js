@@ -1,9 +1,10 @@
 // // creer un compenent 
 import React from 'react'
+import { Font } from 'expo'
 
 // // importer les composents react native
 
-import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Button, TextInput, FlatList, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 class Login extends React.Component {
      //   // methode obligatoire
@@ -13,7 +14,15 @@ class Login extends React.Component {
           this.state = {
                email: '',
                password: '',
+               fontLoaded: false
           }
+     }
+
+     async componentWillMount() {
+          await Font.loadAsync({
+               'CenturyGothic': require('../fonts/CenturyGothic.ttf')
+          });
+          this.setState({ fontLoaded: true });
      }
 
      login = () => {
@@ -61,33 +70,50 @@ class Login extends React.Component {
                          />
                     </View>
                     <View style={{ flex: 2, justifyContent: 'center', flexDirection: 'column', }}>
-                         <TextInput
-                              placeholder="E-mail"
-                              placeholderTextColor="white"
-                              TextInput="rgba(255,255,255,0.5"
-                              onChangeText={email => this.setState({ email })}
-                              style={styles.input}
-                         />
-                         <TextInput
-                              placeholder="Mot de passe"
-                              secureTextEntry={true}
-                              placeholderTextColor="white"
-                              TextInput="rgba(255,255,255,0.5"
-                              onChangeText={password => this.setState({ password })}
-                              style={styles.input}
-                         />
+                         {this.state.fontLoaded ? (
+                              <TextInput
+                                   placeholder="E-mail"
+                                   placeholderTextColor="white"
+                                   TextInput="rgba(255,255,255,0.5"
+                                   onChangeText={email => this.setState({ email })}
+                                   style={styles.input}
+                              />
+                         ) : (
+                                   <ActivityIndicator size="large" />
+                              )}
+
+                         {this.state.fontLoaded ? (
+                              <TextInput
+                                   placeholder="Mot de passe"
+                                   secureTextEntry={true}
+                                   placeholderTextColor="white"
+                                   TextInput="rgba(255,255,255,0.5"
+                                   onChangeText={password => this.setState({ password })}
+                                   style={styles.input}
+                              />
+                         ) : (
+                                   <ActivityIndicator size="large" />
+                              )}
 
                          <TouchableOpacity
                               onPress={this.login}
                               style={styles.login}>
-                              <Text style={styles.button}>S'identifier</Text>
+                              {this.state.fontLoaded ? (
+                                   <Text style={styles.button}>S'identifier</Text>
+                              ) : (
+                                        <ActivityIndicator size="large" />
+                                   )}
                          </TouchableOpacity>
 
                          <TouchableOpacity style={styles.forget} onPress={() => this.props.navigation.navigate('Choise')}>
-                              <Text style={styles.forget}>Tu n'as pas encore de compte ? Inscris-toi ! </Text>
+                              {this.state.fontLoaded ? (
+                                   <Text style={styles.forget}>Tu n'as pas encore de compte ? Inscris-toi ! </Text>
+                              ) : (
+                                        <ActivityIndicator size="large" />
+                                   )}
                          </TouchableOpacity>
                     </View>
-                    <View style={{flex: 1}}></View>
+                    <View style={{ flex: 1 }}></View>
                </View>
 
 
@@ -101,7 +127,7 @@ const styles = StyleSheet.create({
 
      },
      input: {
-
+          fontFamily: 'CenturyGothic',
           borderRadius: 10,
           color: 'white',
           textAlign: 'center',
@@ -143,12 +169,14 @@ const styles = StyleSheet.create({
 
      },
      logo: {
-          width: 350,
-          height: 350,
+          width: 250,
+          height: 250,
           marginLeft: 30,
-          marginTop: 100
+          marginTop: 20,
      },
      forget: {
+          fontFamily: 'CenturyGothic',
+          fontFamily: 'CenturyGothic',
           marginTop: 10,
           textAlign: 'center',
           color: 'white',
